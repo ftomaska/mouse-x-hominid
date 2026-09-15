@@ -1,0 +1,427 @@
+<title>Mouse vs. Hominid</title>
+<style>
+  :root{
+    --bg:#faf8f4; --panel:#ffffff; --ink:#1c1a17; --muted:#6b6459;
+    --line:#e7e1d6; --accent:#a24a2f; --accent2:#3f6b56; --code-bg:#f1ede4;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#17140f; --panel:#211d17; --ink:#ece6da; --muted:#a89e8d;
+      --line:#3a342a; --accent:#e08a5f; --accent2:#7fbfa2; --code-bg:#2a251d;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#17140f; --panel:#211d17; --ink:#ece6da; --muted:#a89e8d;
+    --line:#3a342a; --accent:#e08a5f; --accent2:#7fbfa2; --code-bg:#2a251d;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    line-height:1.55;
+  }
+  .wrap{max-width:920px; margin:0 auto; padding:48px 20px 100px;}
+  header.hero{margin-bottom:56px;}
+  .kicker{
+    font-size:12.5px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--accent); font-weight:700; margin-bottom:10px;
+  }
+  h1{font-size:clamp(28px,4vw,40px); margin:0 0 14px; letter-spacing:-0.01em;}
+  .lede{color:var(--muted); font-size:17px; max-width:66ch;}
+  section{margin-bottom:64px;}
+  h2{
+    font-size:22px; margin:0 0 6px; padding-bottom:12px;
+    border-bottom:1px solid var(--line);
+  }
+  .section-num{color:var(--accent); font-variant-numeric:tabular-nums;}
+  .section-intro{color:var(--muted); font-size:15px; margin:14px 0 24px; max-width:70ch;}
+  .gif-pair{display:flex; gap:24px; flex-wrap:wrap;}
+  .gif-card{
+    flex:1 1 260px; background:var(--panel); border:1px solid var(--line);
+    border-radius:10px; padding:16px; text-align:center;
+  }
+  .gif-card img{max-width:100%; border-radius:6px; display:block; margin:0 auto;}
+  .gif-card .cap{margin-top:10px; font-size:13.5px; color:var(--muted);}
+  .gif-card .cap b{color:var(--ink);}
+  .stat-grid{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:14px; margin:20px 0 28px;
+  }
+  .stat{
+    background:var(--panel); border:1px solid var(--line); border-radius:10px;
+    padding:16px 18px;
+  }
+  .stat .n{font-size:24px; font-weight:700; font-variant-numeric:tabular-nums;}
+  .stat .l{font-size:12.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-top:2px;}
+  .prose p{margin:0 0 14px; max-width:72ch;}
+  .prose code{
+    background:var(--code-bg); padding:2px 6px; border-radius:5px;
+    font-size:13.5px; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  pre{
+    background:var(--code-bg); border:1px solid var(--line); border-radius:8px;
+    padding:16px 18px; overflow-x:auto; font-size:13px; line-height:1.5;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  .arch-flow{
+    display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:18px 0 6px;
+    font-size:13px; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  .arch-flow .blk{
+    background:var(--panel); border:1px solid var(--line); border-radius:7px;
+    padding:7px 11px;
+  }
+  .arch-flow .blk.frozen{opacity:0.55;}
+  .arch-flow .arrow{color:var(--muted);}
+  .grid2{
+    display:grid; grid-template-columns:repeat(2,1fr); gap:18px; margin-top:20px;
+  }
+  @media (max-width:640px){ .grid2{grid-template-columns:1fr;} }
+  .class-block h3{
+    font-size:15px; text-transform:uppercase; letter-spacing:.06em;
+    color:var(--muted); margin:0 0 14px; font-weight:700;
+  }
+  figure{margin:0 0 14px; background:var(--panel); border:1px solid var(--line);
+    border-radius:10px; overflow:hidden;}
+  figure img{display:block; width:100%; height:auto;}
+  figcaption{font-size:12px; color:var(--muted); padding:8px 12px;}
+  .badge{
+    display:inline-block; font-size:11px; font-weight:700; letter-spacing:.05em;
+    text-transform:uppercase; padding:3px 8px; border-radius:5px; margin-left:8px;
+  }
+  .badge.flip{background:#c94f31; color:#fff;}
+  .badge.noflip{background:var(--line); color:var(--muted);}
+  .stat-row{
+    display:grid; grid-template-columns:repeat(2,1fr); gap:18px; margin:20px 0 4px;
+  }
+  @media (max-width:640px){ .stat-row{grid-template-columns:1fr;} }
+  .stat-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:10px;
+    padding:18px 20px; display:flex; flex-direction:column; gap:4px;
+  }
+  .stat-num{font-size:28px; font-weight:800; color:var(--accent2);}
+  .stat-label{font-size:13px; color:var(--muted); text-transform:uppercase; letter-spacing:.04em;}
+  .finding{
+    background:var(--panel); border:1px solid var(--line); border-left:3px solid var(--accent2);
+    border-radius:0 10px 10px 0; padding:16px 20px; margin:22px 0; font-size:15px;
+  }
+  .finding b{color:var(--accent2);}
+  .note{
+    background:var(--code-bg); border:1px solid var(--line); border-left:3px solid var(--accent);
+    border-radius:0 10px 10px 0; padding:14px 20px; margin:22px 0; font-size:14px; color:var(--muted);
+  }
+  footer{
+    margin-top:80px; padding-top:24px; border-top:1px solid var(--line);
+    color:var(--muted); font-size:13px;
+  }
+  .todo{
+    display:inline-block; background:var(--code-bg); border:1px dashed var(--line);
+    border-radius:8px; padding:10px 16px; font-size:14px; color:var(--muted);
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="hero">
+    <h1>Mouse vs. Hominid</h1>
+    <p class="lede">Can computer vision objectively determine, whether mice are too different from hominids and thus disqualified as model organism?</p>
+  </header>
+
+  <section id="dataset">
+    <h2><span class="section-num">01</span> &nbsp;The dataset</h2>
+    <p class="section-intro">Every hominid and mouse drawing used to train and validate the classifier, at full resolution, cropped to the ink.</p>
+    <div class="gif-pair">
+      <div class="gif-card">
+        <img src="hominids_all.gif" alt="All hominid sketches, animated">
+        <div class="cap"><b>Hominid</b> &mdash; 77 drawings (61 train / 16 val)</div>
+      </div>
+      <div class="gif-card">
+        <img src="mouse_all.gif" alt="All mouse sketches, animated">
+        <div class="cap"><b>Mouse</b> &mdash; 80 drawings (64 train / 16 val)</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="setup">
+    <h2><span class="section-num">02</span> &nbsp;Split, architecture, training</h2>
+    <div class="stat-grid">
+      <div class="stat"><div class="n">157</div><div class="l">total drawings</div></div>
+      <div class="stat"><div class="n">125</div><div class="l">train (61 hom / 64 mouse)</div></div>
+      <div class="stat"><div class="n">32</div><div class="l">val (16 / 16)</div></div>
+      <div class="stat"><div class="n">4.0M</div><div class="l">total params (1.7M fine-tuned)</div></div>
+      <div class="stat"><div class="n">100%</div><div class="l">best val accuracy</div></div>
+      <div class="stat"><div class="n">25</div><div class="l">training epochs</div></div>
+    </div>
+
+    <div class="prose">
+      <p>Photos of the drawings were cropped to their ink content, converted to grayscale, and cached as 160&times;160 PNGs (resized to 128&times;128 at load time) so training doesn't re-decode full-resolution source JPEGs every epoch. Training augmentation used random rotation, horizontal flip, small translation, and scale jitter; validation images are unaugmented.</p>
+      <p>The classifier fine-tunes a pretrained EfficientNet-B0 backbone (ImageNet weights). With only 125 training images, fine-tuning the entire 4M-parameter backbone would just memorize the training set, so everything except the final MBConv block and the classifier head is frozen &mdash; 1.7M of the 4.0M total parameters are actually trained.</p>
+    </div>
+
+    <div class="arch-flow">
+      <div class="blk">input 3&times;128&times;128</div>
+      <div class="arrow">&rarr;</div>
+      <div class="blk frozen">stem + blocks 0&ndash;13 (frozen, ImageNet-pretrained)</div>
+      <div class="arrow">&rarr;</div>
+      <div class="blk">blocks 14&ndash;15 (fine-tuned)</div>
+      <div class="arrow">&rarr;</div>
+      <div class="blk">conv_head + BN (fine-tuned)</div>
+      <div class="arrow">&rarr;</div>
+      <div class="blk">global avg pool</div>
+      <div class="arrow">&rarr;</div>
+      <div class="blk">dropout &rarr; linear(1280&rarr;2), fine-tuned</div>
+    </div>
+
+    <p class="prose" style="margin-top:22px;">Optimized with AdamW (lr 3e-4, weight decay 1e-4) and cosine annealing over 25 epochs, cross-entropy loss, batch size 16, ImageNet normalization. Validation accuracy reached 100% by epoch 18 and briefly held it before mild overfitting set back in as the frozen backbone's few trainable layers kept fitting a training set this small &mdash; the checkpoint saved is the epoch-18 best, not the final epoch:</p>
+    <pre>epoch  1/25  train_loss=0.5903  val_loss=0.4901  val_acc=90.6%
+epoch  5/25  train_loss=0.1143  val_loss=0.1071  val_acc=96.9%
+epoch 10/25  train_loss=0.0719  val_loss=0.0587  val_acc=96.9%
+epoch 15/25  train_loss=0.0188  val_loss=0.0606  val_acc=96.9%
+epoch 18/25  train_loss=0.0371  val_loss=0.0671  val_acc=100.0%
+epoch 19/25  train_loss=0.0693  val_loss=0.0775  val_acc=100.0%
+epoch 22/25  train_loss=0.0447  val_loss=0.1307  val_acc=96.9%
+epoch 25/25  train_loss=0.0586  val_loss=0.1854  val_acc=93.8%
+best val acc: 100.0%  (epoch 18 checkpoint used below)</pre>
+  </section>
+
+  <section id="gradcam">
+    <h2><span class="section-num">03</span> &nbsp;What the model looks at &mdash; GradCAM</h2>
+    <p class="section-intro">GradCAM highlights, in red, which regions of each drawing produced the strongest gradient for the model's predicted class. Ten validation examples per class, shown at full resolution.</p>
+
+    <div class="grid2">
+      <div class="class-block">
+        <h3>Hominid</h3>
+        <figure>
+          <img src="gradcam_effnet/hominids_01.png" alt="hominids example 1">
+          <figcaption>Hominids #1</figcaption>
+        </figure>
+        <figure>
+          <img src="gradcam_effnet/hominids_02.png" alt="hominids example 2">
+          <figcaption>Hominids #2</figcaption>
+        </figure>
+        <figure>
+          <img src="gradcam_effnet/hominids_03.png" alt="hominids example 3">
+          <figcaption>Hominids #3</figcaption>
+        </figure>
+        <figure>
+          <img src="gradcam_effnet/hominids_04.png" alt="hominids example 4">
+          <figcaption>Hominids #4</figcaption>
+        </figure>
+        <figure>
+          <img src="gradcam_effnet/hominids_05.png" alt="hominids example 5">
+          <figcaption>Hominids #5</figcaption>
+        </figure>
+        <figure>
+          <img src="gradcam_effnet/hominids_06.png" alt="hominids example 6">
+          <figcaption>Hominids #6</figcaption>
+        </figure>
+        <figure>
+          <img src="gradcam_effnet/hominids_07.png" alt="hominids example 7">
+          <figcaption>Hominids #7</figcaption>
+        </figure>
+        <figure>
+          <img src="gradcam_effnet/hominids_08.png" alt="hominids example 8">
+          <figcaption>Hominids #8</figcaption>
+        </figure>
+        <figure>
+          <img src="gradcam_effnet/hominids_09.png" alt="hominids example 9">
+          <figcaption>Hominids #9</figcaption>
+        </figure>
+        <figure>
+          <img src="gradcam_effnet/hominids_10.png" alt="hominids example 10">
+          <figcaption>Hominids #10</figcaption>
+        </figure>
+      </div>
+      <div class="class-block">
+        <h3>Mouse</h3>
+        <figure>
+          <img src="gradcam_effnet/mouse_01.png" alt="mouse example 1">
+          <figcaption>Mouse #1</figcaption>
+        </figure>
+        <figure>
+          <img src="gradcam_effnet/mouse_02.png" alt="mouse example 2">
+          <figcaption>Mouse #2</figcaption>
+        </figure>
+        <figure>
+          <img src="gradcam_effnet/mouse_03.png" alt="mouse example 3">
+          <figcaption>Mouse #3</figcaption>
+        </figure>
+        <figure>
+          <img src="gradcam_effnet/mouse_04.png" alt="mouse example 4">
+          <figcaption>Mouse #4</figcaption>
+        </figure>
+        <figure>
+          <img src="gradcam_effnet/mouse_05.png" alt="mouse example 5">
+          <figcaption>Mouse #5</figcaption>
+        </figure>
+        <figure>
+          <img src="gradcam_effnet/mouse_06.png" alt="mouse example 6">
+          <figcaption>Mouse #6</figcaption>
+        </figure>
+        <figure>
+          <img src="gradcam_effnet/mouse_07.png" alt="mouse example 7">
+          <figcaption>Mouse #7</figcaption>
+        </figure>
+        <figure>
+          <img src="gradcam_effnet/mouse_08.png" alt="mouse example 8">
+          <figcaption>Mouse #8</figcaption>
+        </figure>
+        <figure>
+          <img src="gradcam_effnet/mouse_09.png" alt="mouse example 9">
+          <figcaption>Mouse #9</figcaption>
+        </figure>
+        <figure>
+          <img src="gradcam_effnet/mouse_10.png" alt="mouse example 10">
+          <figcaption>Mouse #10</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="occlusion">
+    <h2><span class="section-num">04</span> &nbsp;Breaking it &mdash; blackout occlusion</h2>
+    <p class="section-intro">A more literal test than GradCAM: physically paint a black square over part of the drawing and re-run the classifier. Does the model change its mind? To keep the occlusion honest, the search is now capped at a 32px square (about a quarter of the 128px canvas) instead of letting it grow until something flips, and it's run over <i>every</i> image in the dataset rather than stopping once 10 flips are found &mdash; so the numbers below are the true flip rate, not a cherry-picked set of successes.</p>
+
+    <div class="stat-row">
+      <div class="stat-card"><span class="stat-num">58 / 80</span><span class="stat-label">mouse flipped (72.5%) at &le; 32px</span></div>
+      <div class="stat-card"><span class="stat-num">3 / 77</span><span class="stat-label">hominid flipped (3.9%) at &le; 32px</span></div>
+    </div>
+
+    <div class="grid2">
+      <div class="class-block">
+        <h3>Mouse &rarr; 58/80 flipped at &le; 32px (72.5%)</h3>
+        <figure>
+          <img src="occlusion_effnet/mouse_01.png" alt="Mouse example 1">
+          <figcaption>Mouse #1<span class="badge noflip">no flip</span></figcaption>
+        </figure>
+        <figure>
+          <img src="occlusion_effnet/mouse_02.png" alt="Mouse example 2">
+          <figcaption>Mouse #2<span class="badge noflip">no flip</span></figcaption>
+        </figure>
+        <figure>
+          <img src="occlusion_effnet/mouse_03.png" alt="Mouse example 3">
+          <figcaption>Mouse #3<span class="badge flip">flipped</span></figcaption>
+        </figure>
+        <figure>
+          <img src="occlusion_effnet/mouse_04.png" alt="Mouse example 4">
+          <figcaption>Mouse #4<span class="badge noflip">no flip</span></figcaption>
+        </figure>
+        <figure>
+          <img src="occlusion_effnet/mouse_05.png" alt="Mouse example 5">
+          <figcaption>Mouse #5<span class="badge flip">flipped</span></figcaption>
+        </figure>
+        <figure>
+          <img src="occlusion_effnet/mouse_06.png" alt="Mouse example 6">
+          <figcaption>Mouse #6<span class="badge flip">flipped</span></figcaption>
+        </figure>
+        <figure>
+          <img src="occlusion_effnet/mouse_07.png" alt="Mouse example 7">
+          <figcaption>Mouse #7<span class="badge flip">flipped</span></figcaption>
+        </figure>
+        <figure>
+          <img src="occlusion_effnet/mouse_08.png" alt="Mouse example 8">
+          <figcaption>Mouse #8<span class="badge flip">flipped</span></figcaption>
+        </figure>
+        <figure>
+          <img src="occlusion_effnet/mouse_09.png" alt="Mouse example 9">
+          <figcaption>Mouse #9<span class="badge flip">flipped</span></figcaption>
+        </figure>
+        <figure>
+          <img src="occlusion_effnet/mouse_10.png" alt="Mouse example 10">
+          <figcaption>Mouse #10<span class="badge flip">flipped</span></figcaption>
+        </figure>
+      </div>
+      <div class="class-block">
+        <h3>Hominid &rarr; 3/77 flipped at &le; 32px (3.9%)</h3>
+        <figure>
+          <img src="occlusion_effnet/hominids_01.png" alt="Hominids example 1">
+          <figcaption>Hominids #1<span class="badge noflip">no flip</span></figcaption>
+        </figure>
+        <figure>
+          <img src="occlusion_effnet/hominids_02.png" alt="Hominids example 2">
+          <figcaption>Hominids #2<span class="badge noflip">no flip</span></figcaption>
+        </figure>
+        <figure>
+          <img src="occlusion_effnet/hominids_03.png" alt="Hominids example 3">
+          <figcaption>Hominids #3<span class="badge noflip">no flip</span></figcaption>
+        </figure>
+        <figure>
+          <img src="occlusion_effnet/hominids_04.png" alt="Hominids example 4">
+          <figcaption>Hominids #4<span class="badge noflip">no flip</span></figcaption>
+        </figure>
+        <figure>
+          <img src="occlusion_effnet/hominids_05.png" alt="Hominids example 5">
+          <figcaption>Hominids #5<span class="badge flip">flipped</span></figcaption>
+        </figure>
+        <figure>
+          <img src="occlusion_effnet/hominids_06.png" alt="Hominids example 6">
+          <figcaption>Hominids #6<span class="badge noflip">no flip</span></figcaption>
+        </figure>
+        <figure>
+          <img src="occlusion_effnet/hominids_07.png" alt="Hominids example 7">
+          <figcaption>Hominids #7<span class="badge noflip">no flip</span></figcaption>
+        </figure>
+        <figure>
+          <img src="occlusion_effnet/hominids_08.png" alt="Hominids example 8">
+          <figcaption>Hominids #8<span class="badge noflip">no flip</span></figcaption>
+        </figure>
+        <figure>
+          <img src="occlusion_effnet/hominids_09.png" alt="Hominids example 9">
+          <figcaption>Hominids #9<span class="badge noflip">no flip</span></figcaption>
+        </figure>
+        <figure>
+          <img src="occlusion_effnet/hominids_10.png" alt="Hominids example 10">
+          <figcaption>Hominids #10<span class="badge noflip">no flip</span></figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="finding">
+      Capped at a modest 32px square and run over the full dataset, the two classes turn out to have very different robustness: 72.5% of mouse drawings (58/80) can be flipped to "hominid" with a single small black square, but only 3.9% of hominid drawings (3/77) can be flipped to "mouse" the same way. This can be interpreted as that if we squint our eyes, or if an inconvenient black square is in our visual field, we can see mice as hominids. Not the other way though. One conclusion from this can be that mice are actually a valid model for studying humans. With the caveat that humans are not great models for studying mice.
+    </div>
+  </section>
+
+  <section id="denovo">
+    <h2><span class="section-num">05</span> &nbsp;Synthesizing a class from nothing</h2>
+    <p class="section-intro">GradCAM and occlusion both show where in a <i>real</i> drawing the model is looking &mdash; but not what shape it actually learned. To test that directly: start from a blank canvas (no dataset photo involved at all) and run gradient ascent on the classifier's own output logit, synthesizing whatever image most convinces it that it's looking at a "mouse" or a "hominid." Ink is parameterized as a small number of continuous Bezier strokes with a fixed pen width (not a pixel grid), so the model can only spend its ink budget by drawing actual lines, never by scattering points. Rather than matching the real dataset's total ink coverage (a scalar budget), the loss now matches the radially-averaged spatial-frequency spectrum of real drawings &mdash; rewarding the same balance of fine-line-scale vs. blob-scale structure that real hand-drawn ink has, not just the same amount of it. Each class below shows eight independent runs from random initializations (the top 8 of 16 by confidence), not one cherry-picked "best" result.</p>
+
+    <div class="grid2">
+      <div class="class-block">
+        <h3>Hominid</h3>
+        <figure>
+          <img src="class_viz_freq/hominids_grid.png" alt="Eight synthesized hominids, frequency-matched, EfficientNet-B0">
+          <figcaption>8 independent syntheses of "hominid" &mdash; all p&asymp;1.00, frequency-matched to real hominid drawings</figcaption>
+        </figure>
+      </div>
+      <div class="class-block">
+        <h3>Mouse</h3>
+        <figure>
+          <img src="class_viz_freq/mouse_grid.png" alt="Eight synthesized mice, frequency-matched, EfficientNet-B0">
+          <figcaption>8 independent syntheses of "mouse" &mdash; all p&asymp;1.00, frequency-matched to real mouse drawings</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="finding">
+      Swapping the ink-budget penalty for a spatial-frequency match changes the character of the result more than the headline "hominid vs. mouse" shape story. Both classes now converge to <b>wobbly, scalloped lines</b> with periodic fine-scale texture along their length, rather than the smooth single strokes the ink-matched version found &mdash; because matching a real drawing's frequency spectrum rewards exactly that kind of fine-grained irregularity, not just a thin continuous curve. Within that shared texture, the classes still diverge in overall structure: hominid syntheses tend toward one or two loosely closed, loopy forms &mdash; a rough torso-and-limb silhouette rather than a single clean line &mdash; while mouse syntheses are consistently busier and more tangled, with several strokes crossing and knotting near the center of the canvas. The frequency prior naturally settles on more total ink than the real dataset average (roughly 6&ndash;8% coverage here vs. ~1&ndash;2% in the real photos) since matching spectral shape doesn't directly cap total ink the way the old budget penalty did &mdash; but the class-conditional shape difference survives the change in prior, which is some evidence it isn't an artifact of the ink-matching setup specifically.
+    </div>
+  </section>
+
+  <section id="conclusion">
+    <h2><span class="section-num">06</span> &nbsp;Conclusion</h2>
+    <div class="prose">
+      <p>Three independent probes &mdash; GradCAM, occlusion, and de-novo synthesis &mdash; end up telling a consistent story about what each class actually looks like to this model. Looking across all three: <b>hominid</b> seems to be defined mainly by the core/crotch region, with a limb reaching off to one side or another &mdash; a reading that matches GradCAM's activations clustering around the torso, occlusion's finding that hominid evidence is diffuse enough that no single small patch reliably erases it, and synthesis converging on one or two loosely closed, torso-and-limb-like loops. <b>Mouse</b> reads as defined by a pair of prominent ears together with a rounded back held close by &mdash; consistent with GradCAM's more localized hotspots, occlusion's finding that a single small patch flips most mice, and synthesis landing on busier, tangled marks clustered tightly rather than spread across the canvas. More broadly, humans read as "limby" to this network &mdash; an extended form built from a core plus reaching limbs &mdash; while mice read as a compact aggregation of bigger, rounder features held close together. The asymmetry that runs through all three tests &mdash; hominid as one diffuse, holistic form vs. mouse as a couple of compact, swappable features in close proximity &mdash; is a plausible reason the model finds mouse so much easier to disrupt with a single occlusion, and hominid so much harder.</p>
+      <p>That occlusion asymmetry only runs one way: squint, or drop one inconvenient black square in the wrong place, and a mouse can start to look like a hominid to this model &mdash; but the reverse essentially never happens (only 3.9% of hominids flip, vs. 72.5% of mice). That's almost a computational vindication of the mouse as a model organism for humans &mdash; a mouse's compact feature set can degrade into "human enough," but a human's more diffuse, spread-out structure doesn't degrade into "mouse enough" nearly as easily. The reverse claim, that humans make a good model for studying mice, gets no support here at all.</p>
+      <blockquote style="margin:18px 0 0; padding:14px 20px; border-left:3px solid var(--accent); background:var(--code-bg); border-radius:0 10px 10px 0; font-style:italic; color:var(--muted); font-size:15px;">
+        We work with mice to study vision and wish to extrapolate our findings to humans. But mice are nocturnal animals adapted to whisk, smell and hear their way through the world. Such is the valid criticism of this model.<br><br>
+        As a mouse researcher I am biased. That is why I reached out to computer vision to provide the ultimate objective truth.<br><br>
+        The results presented above demonstrate that mice can be classified as hominids if we are not looking too closely.
+      </blockquote>
+    </div>
+  </section>
+
+  <footer>
+    mammals &middot; hand-drawn sketch classifier, EfficientNet-B0 transfer learning, 2026
+  </footer>
+
+</div>

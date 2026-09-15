@@ -1,0 +1,106 @@
+{
+  "hominids": [
+    {
+      "rank": 1,
+      "size": 32,
+      "flipped": false
+    },
+    {
+      "rank": 2,
+      "size": 32,
+      "flipped": false
+    },
+    {
+      "rank": 3,
+      "size": 32,
+      "flipped": false
+    },
+    {
+      "rank": 4,
+      "size": 16,
+      "flipped": false
+    },
+    {
+      "rank": 5,
+      "size": 16,
+      "flipped": true
+    },
+    {
+      "rank": 6,
+      "size": 32,
+      "flipped": false
+    },
+    {
+      "rank": 7,
+      "size": 32,
+      "flipped": false
+    },
+    {
+      "rank": 8,
+      "size": 32,
+      "flipped": false
+    },
+    {
+      "rank": 9,
+      "size": 32,
+      "flipped": false
+    },
+    {
+      "rank": 10,
+      "size": 32,
+      "flipped": false
+    }
+  ],
+  "mouse": [
+    {
+      "rank": 1,
+      "size": 16,
+      "flipped": false
+    },
+    {
+      "rank": 2,
+      "size": 32,
+      "flipped": false
+    },
+    {
+      "rank": 3,
+      "size": 32,
+      "flipped": true
+    },
+    {
+      "rank": 4,
+      "size": 32,
+      "flipped": false
+    },
+    {
+      "rank": 5,
+      "size": 32,
+      "flipped": true
+    },
+    {
+      "rank": 6,
+      "size": 32,
+      "flipped": true
+    },
+    {
+      "rank": 7,
+      "size": 16,
+      "flipped": true
+    },
+    {
+      "rank": 8,
+      "size": 16,
+      "flipped": true
+    },
+    {
+      "rank": 9,
+      "size": 32,
+      "flipped": true
+    },
+    {
+      "rank": 10,
+      "size": 32,
+      "flipped": true
+    }
+  ]
+}

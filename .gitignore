@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.DS_Store
+# The base ImageNet-pretrained EfficientNet-B0 weights are a ~20MB
+# third-party download, not project content -- train_effnet.py fetches
+# them automatically on first run (see WEIGHTS / the URL in that file).
+models_effnet/efficientnet-b0-355c32eb.pth
+models_effnet/classifier_final.pth

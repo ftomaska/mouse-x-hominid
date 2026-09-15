@@ -1,0 +1,12 @@
+{
+  "hominids": {
+    "n_total": 77,
+    "n_flipped": 3,
+    "pct": 3.896103896103896
+  },
+  "mouse": {
+    "n_total": 80,
+    "n_flipped": 58,
+    "pct": 72.5
+  }
+}
