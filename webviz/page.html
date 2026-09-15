@@ -1,9 +1,4 @@
-<!doctype html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mouse vs. Hominid</title>
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mouse vs. Hominid</title>
 <style>
   :root{
     --bg:#faf8f4; --panel:#ffffff; --ink:#1c1a17; --muted:#6b6459;
@@ -123,10 +118,7 @@
     display:inline-block; background:var(--code-bg); border:1px dashed var(--line);
     border-radius:8px; padding:10px 16px; font-size:14px; color:var(--muted);
   }
-</style>
-</head>
-<body>
-
+</style></head><body>
 
 <div class="wrap">
 
@@ -288,7 +280,8 @@ best val acc: 100.0%  (epoch 18 checkpoint used below)</pre>
 
   <section id="occlusion">
     <h2><span class="section-num">04</span> &nbsp;Breaking it &mdash; blackout occlusion</h2>
-    <p class="section-intro">A more literal test than GradCAM: physically paint a black square over part of the drawing and re-run the classifier. Does the model change its mind? To keep the occlusion honest, the search is now capped at a 32px square (about a quarter of the 128px canvas) instead of letting it grow until something flips, and it's run over <i>every</i> image in the dataset rather than stopping once 10 flips are found &mdash; so the numbers below are the true flip rate, not a cherry-picked set of successes.</p>
+    <p class="section-intro">One interpretation of the existence of a somewhat consistent GradCAM heatmap is that there is a body part or feature the model finds most important for classifying. What would happen if we occluded a little part of the image and re-run the classifier? Does it truly depend on a small detail? Can a mouse be seen as a hominid? Can a hominid be seen as a mouse?</p>
+    <p class="section-intro">We limited the occlusion to max 32px (of the 128px canvas) and counted how many samples of the whole dataset we were able to 'flip' to the opposite class.</p>
 
     <div class="stat-row">
       <div class="stat-card"><span class="stat-num">58 / 80</span><span class="stat-label">mouse flipped (72.5%) at &le; 32px</span></div>
@@ -385,13 +378,17 @@ best val acc: 100.0%  (epoch 18 checkpoint used below)</pre>
     </div>
 
     <div class="finding">
-      Capped at a modest 32px square and run over the full dataset, the two classes turn out to have very different robustness: 72.5% of mouse drawings (58/80) can be flipped to "hominid" with a single small black square, but only 3.9% of hominid drawings (3/77) can be flipped to "mouse" the same way. This can be interpreted as that if we squint our eyes, or if an inconvenient black square is in our visual field, we can see mice as hominids. Not the other way though. One conclusion from this can be that mice are actually a valid model for studying humans. With the caveat that humans are not great models for studying mice.
+      Our two classes seem to have very different robustness to this blackout occlusion test. 72.5% of mouse drawings (58/80) can be flipped to "hominid" with a single small black square, but only 3.9% of hominid drawings (3/77) can be flipped to "mouse" the same way.<br><br>
+      Could this mean that if we squint our eyes, metaphorically or literally or if something occludes are vision, we can see mice as hominids? Moreover, this does not work the other way!<br><br>
+      One conclusion from this can be that mice are actually a valid model for studying humans. With the caveat that humans are not great models for studying mice. The model is objective after all.
     </div>
   </section>
 
   <section id="denovo">
-    <h2><span class="section-num">05</span> &nbsp;Synthesizing a class from nothing</h2>
-    <p class="section-intro">GradCAM and occlusion both show where in a <i>real</i> drawing the model is looking &mdash; but not what shape it actually learned. To test that directly: start from a blank canvas (no dataset photo involved at all) and run gradient ascent on the classifier's own output logit, synthesizing whatever image most convinces it that it's looking at a "mouse" or a "hominid." Ink is parameterized as a small number of continuous Bezier strokes with a fixed pen width (not a pixel grid), so the model can only spend its ink budget by drawing actual lines, never by scattering points. Rather than matching the real dataset's total ink coverage (a scalar budget), the loss now matches the radially-averaged spatial-frequency spectrum of real drawings &mdash; rewarding the same balance of fine-line-scale vs. blob-scale structure that real hand-drawn ink has, not just the same amount of it. Each class below shows eight independent runs from random initializations (the top 8 of 16 by confidence), not one cherry-picked "best" result.</p>
+    <h2><span class="section-num">05</span> &nbsp;de novo synthesis</h2>
+    <p class="section-intro">Heatmaps and blackout occlusions show us how the model treats the data it is presented with. But what is the idea of a mouse, of a hominid that it actually learned?<br><br>
+    To try and answer this we started with a blank canvas and ran a gradient ascent on the classifiers output logic leading to a convincing 'mouse' or 'hominind'<br><br>
+    We put in a couple of constraints: we force continuous strokes with a fixed pen width rather than a pixel grid and the loss was set to reward the spatial frequency spectrum of the training data. Below are eight runs from random initializations.</p>
 
     <div class="grid2">
       <div class="class-block">
@@ -411,19 +408,18 @@ best val acc: 100.0%  (epoch 18 checkpoint used below)</pre>
     </div>
 
     <div class="finding">
-      Swapping the ink-budget penalty for a spatial-frequency match changes the character of the result more than the headline "hominid vs. mouse" shape story. Both classes now converge to <b>wobbly, scalloped lines</b> with periodic fine-scale texture along their length, rather than the smooth single strokes the ink-matched version found &mdash; because matching a real drawing's frequency spectrum rewards exactly that kind of fine-grained irregularity, not just a thin continuous curve. Within that shared texture, the classes still diverge in overall structure: hominid syntheses tend toward one or two loosely closed, loopy forms &mdash; a rough torso-and-limb silhouette rather than a single clean line &mdash; while mouse syntheses are consistently busier and more tangled, with several strokes crossing and knotting near the center of the canvas. The frequency prior naturally settles on more total ink than the real dataset average (roughly 6&ndash;8% coverage here vs. ~1&ndash;2% in the real photos) since matching spectral shape doesn't directly cap total ink the way the old budget penalty did &mdash; but the class-conditional shape difference survives the change in prior, which is some evidence it isn't an artifact of the ink-matching setup specifically.
+      The idea of what a hominid and what a mouse is. A bunch of extremities on one side and a blob of round shapes on the other.
     </div>
   </section>
 
   <section id="conclusion">
     <h2><span class="section-num">06</span> &nbsp;Conclusion</h2>
     <div class="prose">
-      <p>Three independent probes &mdash; GradCAM, occlusion, and de-novo synthesis &mdash; end up telling a consistent story about what each class actually looks like to this model. Looking across all three: <b>hominid</b> seems to be defined mainly by the core/crotch region, with a limb reaching off to one side or another &mdash; a reading that matches GradCAM's activations clustering around the torso, occlusion's finding that hominid evidence is diffuse enough that no single small patch reliably erases it, and synthesis converging on one or two loosely closed, torso-and-limb-like loops. <b>Mouse</b> reads as defined by a pair of prominent ears together with a rounded back held close by &mdash; consistent with GradCAM's more localized hotspots, occlusion's finding that a single small patch flips most mice, and synthesis landing on busier, tangled marks clustered tightly rather than spread across the canvas. More broadly, humans read as "limby" to this network &mdash; an extended form built from a core plus reaching limbs &mdash; while mice read as a compact aggregation of bigger, rounder features held close together. The asymmetry that runs through all three tests &mdash; hominid as one diffuse, holistic form vs. mouse as a couple of compact, swappable features in close proximity &mdash; is a plausible reason the model finds mouse so much easier to disrupt with a single occlusion, and hominid so much harder.</p>
-      <p>That occlusion asymmetry only runs one way: squint, or drop one inconvenient black square in the wrong place, and a mouse can start to look like a hominid to this model &mdash; but the reverse essentially never happens (only 3.9% of hominids flip, vs. 72.5% of mice). That's almost a computational vindication of the mouse as a model organism for humans &mdash; a mouse's compact feature set can degrade into "human enough," but a human's more diffuse, spread-out structure doesn't degrade into "mouse enough" nearly as easily. The reverse claim, that humans make a good model for studying mice, gets no support here at all.</p>
+      <p>We took a model that has seen the world/the ImageNet database, and showed it hominids and mice. We saw where the model looks for information when having to decide, we found that it is easy to fool into thinking a mouse is a hominid, but not the other way and finally we saw its somewhat abstract ideas of our shapes.</p>
+      <p>Hominids are "limby" crotch-centric figures, while mice are defined by their ears with a round back in close proximity. And yet by squinting its eyes, or having carefully placing a small black square, this objective judge can mistake a mouse for a hominid. This can be interpreted as a computational confirmation that mice are valid model organisms for humans. Surprisingly, though, we should be careful when extrapolating ideas from humans to mice as it might not be as easy.</p>
       <blockquote style="margin:18px 0 0; padding:14px 20px; border-left:3px solid var(--accent); background:var(--code-bg); border-radius:0 10px 10px 0; font-style:italic; color:var(--muted); font-size:15px;">
         We work with mice to study vision and wish to extrapolate our findings to humans. But mice are nocturnal animals adapted to whisk, smell and hear their way through the world. Such is the valid criticism of this model.<br><br>
-        As a mouse researcher I am biased. That is why I reached out to computer vision to provide the ultimate objective truth.<br><br>
-        The results presented above demonstrate that mice can be classified as hominids if we are not looking too closely.
+        As a mouse researcher I am biased. That is why I reached out to computer vision to provide the ultimate objective truth.
       </blockquote>
     </div>
   </section>
@@ -433,6 +429,4 @@ best val acc: 100.0%  (epoch 18 checkpoint used below)</pre>
   </footer>
 
 </div>
-
-</body>
-</html>
+</body></html>
