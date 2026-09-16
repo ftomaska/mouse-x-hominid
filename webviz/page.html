@@ -124,7 +124,7 @@
 
   <header class="hero">
     <h1>Mouse vs. Hominid</h1>
-    <p class="lede">Can computer vision objectively determine, whether mice are too different from hominids and thus disqualified as model organism?</p>
+    <p class="lede">Can computer vision objectively determine how different are mice from hominids and settle whether they qualify as a generalizable model organism?</p>
   </header>
 
   <section id="dataset">
@@ -279,7 +279,7 @@ best val acc: 100.0%  (epoch 18 checkpoint used below)</pre>
   </section>
 
   <section id="occlusion">
-    <h2><span class="section-num">04</span> &nbsp;Breaking it &mdash; blackout occlusion</h2>
+    <h2><span class="section-num">04</span> &nbsp;If you squint (or blackout occlude)</h2>
     <p class="section-intro">One interpretation of the existence of a somewhat consistent GradCAM heatmap is that there is a body part or feature the model finds most important for classifying. What would happen if we occluded a little part of the image and re-run the classifier? Does it truly depend on a small detail? Can a mouse be seen as a hominid? Can a hominid be seen as a mouse?</p>
     <p class="section-intro">We limited the occlusion to max 32px (of the 128px canvas) and counted how many samples of the whole dataset we were able to 'flip' to the opposite class.</p>
 
@@ -415,7 +415,9 @@ best val acc: 100.0%  (epoch 18 checkpoint used below)</pre>
   <section id="conclusion">
     <h2><span class="section-num">06</span> &nbsp;Conclusion</h2>
     <div class="prose">
-      <p>We took a model that has seen the world/the ImageNet database, and showed it hominids and mice. We saw where the model looks for information when having to decide, we found that it is easy to fool into thinking a mouse is a hominid, but not the other way and finally we saw its somewhat abstract ideas of our shapes.</p>
+      <p>We took EfficientNet. A model that has seen it all (aka the ImageNet database) and showed it a carefully curated dataset of hominids and mice.<br><br>
+      We saw where the model looks for information when having to decide, we found that it is easy to fool into thinking a mouse is a hominid, but not the other way around.<br><br>
+      Finally, we saw its somewhat abstract ideas of our shapes.</p>
       <p>Hominids are "limby" crotch-centric figures, while mice are defined by their ears with a round back in close proximity. And yet by squinting its eyes, or having carefully placing a small black square, this objective judge can mistake a mouse for a hominid. This can be interpreted as a computational confirmation that mice are valid model organisms for humans. Surprisingly, though, we should be careful when extrapolating ideas from humans to mice as it might not be as easy.</p>
       <blockquote style="margin:18px 0 0; padding:14px 20px; border-left:3px solid var(--accent); background:var(--code-bg); border-radius:0 10px 10px 0; font-style:italic; color:var(--muted); font-size:15px;">
         We work with mice to study vision and wish to extrapolate our findings to humans. But mice are nocturnal animals adapted to whisk, smell and hear their way through the world. Such is the valid criticism of this model.<br><br>
